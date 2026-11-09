@@ -1,75 +1,121 @@
-# Agent Bob Desktop (Electron)
+# Agent Bob
 
-Electron desktop app for **Agent Bob** — same UI as the Chrome extension, with Playwright network capture when extensions are blocked.
+**Watch someone use a website. Turn that journey into a clear map of every call the site makes.**
 
-## Your compiled app (use this)
+Agent Bob is a desktop recorder for real browser work. You open a site, click around like a normal user, and Bob quietly captures the traffic behind the scenes — logins, searches, form saves, popups, the lot. Then you group what happened into steps and walk away with something you can actually reuse.
 
-After building, run or copy this file — **not** the `dist/AgentBob` folder:
+No extension fights. No “install this in Chrome first.” Just start, browse, stop.
 
+---
+
+## Why it exists
+
+Modern websites hide a storm of requests behind every button. Rebuilding that by hand is slow and easy to get wrong. Agent Bob lets you **do the work once in a real browser** and keep a faithful record of what the site did.
+
+Great when you need to:
+
+- Understand how a workflow really talks to its APIs
+- Hand a clean sequence to automation or an AI coding agent
+- Capture traffic even when company browsers block extensions
+- Keep cookies and logins so the next session feels like *your* browser, not a fresh bot
+
+---
+
+## How a session feels
+
+```mermaid
+flowchart LR
+  A[Open Agent Bob] --> B[Enter a website]
+  B --> C[Click Start]
+  C --> D[Browse like a person]
+  D --> E[Mark important steps]
+  E --> F[Click Stop]
+  F --> G[Export or generate prompts]
 ```
-C:\GIT\BobAgentApp\dist\AgentBob-1.0.0-portable.exe
+
+1. **Launch** Agent Bob  
+2. **Enter** the site you care about  
+3. **Start** — a real Chrome window opens  
+4. **Use the site** — clicks, forms, new windows, all fair game  
+5. **Name your steps** as you go (“Login”, “Search”, “Checkout”)  
+6. **Stop** when you’re done and export what you need
+
+---
+
+## What Bob watches
+
+While you browse, Bob listens to the network across every tab and popup in that session.
+
+```mermaid
+flowchart TB
+  User[You using the site] --> Chrome[Chrome window]
+  Chrome --> Calls[Page loads XHR Fetch and more]
+  Calls --> Bob[Agent Bob]
+  Bob --> Steps[Grouped into your steps]
+  Steps --> Out[Export or AI-ready prompts]
 ```
 
-Double-click it. No Node.js install needed on the target PC. Electron is embedded inside the exe.
+- Records **as it happened** — including sensitive values when they appear  
+- Follows **new windows and tabs** opened from the same session  
+- Uses your **installed Chrome** with a saved profile when possible, so logins stick around  
+- Still works with a bundled browser fallback if Chrome isn’t available
 
-## Build the exe (on your dev machine only)
+---
 
-Node.js is only required **on your machine to build** the app, not for users who run the exe.
+## From clicks to clarity
+
+Raw traffic alone is noisy. Bob helps you turn it into a story:
+
+```mermaid
+flowchart LR
+  R[Raw recorded calls] --> S[Your named steps]
+  S --> P[Cleaner workflow view]
+  P --> X[Export / prompts for the next tool]
+```
+
+Mark a step when something meaningful happens. Later calls line up under that step, so “what did login do?” has a simple answer.
+
+---
+
+## Quick start
+
+### Run the app
+
+If you already have the portable build, just open:
+
+`dist/AgentBob-1.0.0-portable.exe`
+
+No Node.js needed on the machine that only runs the app.
+
+### Build it yourself
 
 ```bash
-cd C:\GIT\BobAgentApp
 npm install
 npm run build:portable
 ```
 
-Output: `dist/AgentBob-1.0.0-portable.exe`
-
-Installer + portable:
+Want an installer too?
 
 ```bash
 npm run build:win
 ```
 
-Also creates `dist/AgentBob-1.0.0-setup.exe`.
-
-## Development
+### Develop locally
 
 ```bash
 npm start
 ```
 
-Opens the Agent Bob window (same design as the extension popup).
+---
 
-## How to use
+## A note on the Chrome window
 
-1. Launch **Agent Bob** (the `.exe` or `npm start`)
-2. Enter a **Website URL**
-3. Click **Start** — a Chromium window opens for recording
-4. Use steps, AI prompts, and export as in the extension
-5. Click **Stop** when finished
+Bob prefers **real Google Chrome** and keeps a profile under your app data folder. That means fewer “are you a robot?” surprises, and your cookies can survive between recordings. Strong anti-bot sites can still be picky — but this is much closer to everyday browsing than a blank automation browser.
 
-Session data is stored in your Windows user profile (`AppData`), not next to the exe.
+---
 
-## Why you might see “Node” in the project folder
+## Repo
 
-| What you see | What it is |
-|--------------|------------|
-| `node_modules/` | Dev dependencies only — not shipped to users |
-| `npm` / `node` when building | Used once to **compile** the Electron exe |
-| **`AgentBob-1.0.0-portable.exe`** | **The real desktop app** (Electron inside) |
-| ~~`dist/AgentBob/` with `node.exe`~~ | Old approach — **ignore / delete** |
+Private project for Agent Bob desktop recording.
 
-## Architecture
-
-```
-BobAgentApp/
-  electron/main.js       Electron app shell
-  electron/preload.js    UI bridge
-  lib/                   Recorder + Playwright
-  public/                Same UI as Chrome extension
-  browsers/              Chromium (bundled into exe at build time)
-```
-
-## Chrome extension
-
-The extension in `C:\GIT\BobAgent\api-recorder-extension` remains available for users who can install Chrome extensions.
+Built for people who would rather **show** a workflow than reverse-engineer it.
